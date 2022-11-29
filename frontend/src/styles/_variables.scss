@@ -1,0 +1,23 @@
+$bg-color-primary: #1F2937;
+$bg-color-secondary: lighten($bg-color-primary, 2%);
+$bg-color-dark: darken($bg-color-primary, 2%);
+
+$fg-color-primary: #FFFFFF;
+$fg-color-secondary: lighten(#c7c7c7, 10%);
+
+$color-primary-light: #387EF4;
+$color-primary-normal: #2563EB;
+$color-primary-hover: #2767f3;
+$color-primary-active: #225cd9;
+
+$color-success-normal: #60d360;
+$color-success-hover: #67e367;
+$color-success-active: #55be55;
+
+$color-error-normal: #f83232;
+$color-error-hover: #fa3a3a;
+$color-error-active: #dc2d2d;
+
+$color-warn-normal: rgba(248, 202, 50, 0.78);
+$color-warn-hover: rgba(250, 189, 58, 0.78);
+$color-warn-active: rgba(220, 170, 45, 0.78);
