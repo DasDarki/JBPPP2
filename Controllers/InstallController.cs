@@ -82,26 +82,23 @@ internal class InstallController
     }
 
     [Controller("Uninstall")]
-    internal static void Uninstall(Window window, string rid, string gameFolder)
+    internal static void Uninstall(Window window, string id, string gameFolder)
     {
-        var id = Guid.NewGuid().ToString();
-        window.SendResult(rid, id);
-        
         var patchedFile = Path.Combine(gameFolder, "patched");
         if (!File.Exists(patchedFile))
         {
-            window.SendCommand("UpdateUninstallProgress", id, "ERR01");
+            window.SendCommand("UninstallProgress", id, "ERR01");
             return;
         }
         
         if (!int.TryParse(File.ReadAllText(patchedFile), out var files))
         {
-            window.SendCommand("UpdateUninstallProgress", id, "ERR02");
+            window.SendCommand("UninstallProgress", id, "ERR02");
             return;
         }
         
         var total = files;
-        window.SendCommand("UpdateUninstallProgress", id, "MOVE", 0, total);
+        window.SendCommand("UninstallProgress", id, "MOVE", 0, total);
 
         void RestoreBackup(string dir)
         {
@@ -115,7 +112,7 @@ internal class InstallController
                     File.Delete(backupFile);
                 }
                 
-                window.SendCommand("UpdateUninstallProgress", id!, "MOVE", ++files, total);
+                window.SendCommand("UninstallProgress", id!, "MOVE", ++files, total);
             }
             
             foreach (var innerDir in Directory.GetDirectories(dir))
@@ -128,9 +125,16 @@ internal class InstallController
         
         File.Delete(patchedFile);
         
-        window.SendCommand("UpdateUninstallProgress", id, "DONE");
+        window.SendCommand("UninstallFinish", id);
     }
     
+    [Controller("IsPatchInstalled")]
+    internal static void IsPatchInstalled(Window window, string rid, string gameFolder)
+    {
+        var patchedFile = Path.Combine(gameFolder, "patched");
+        window.SendResult(rid, File.Exists(patchedFile));
+    }
+
     private static void ReplaceFileAndBackup(string source, string destination)
     {
         if (File.Exists(destination))

@@ -1,4 +1,4 @@
-import {execute, generateUuid, onEvent} from "@/libs/bridge";
+import {execute, executeWithReturn, generateUuid, onEvent} from "@/libs/bridge";
 
 export class InstallController {
 
@@ -6,6 +6,8 @@ export class InstallController {
     private static downloadFinishes: {[key: string]: (file: string) => void} = {};
     private static installProgresses: {[key: string]: (action: "EXTRACT"|"MOVE"|"CLEAN", count: number, total: string) => void} = {};
     private static installFinishes: {[key: string]: () => void} = {};
+    private static uninstallProgresses: {[key: string]: (action: "MOVE"|"ERR01"|"ERR02", count: number, total: string) => void} = {};
+    private static uninstallFinishes: {[key: string]: () => void} = {};
 
     public static initialize(): void {
         onEvent("DownloadProgress", (id: string, percent: number) => {
@@ -58,5 +60,28 @@ export class InstallController {
             };
             execute("Install", id, file, dest);
         });
+    }
+
+    public static uninstall(dest: string, progress: ((action: "MOVE"|"ERR01"|"ERR02", count: number, total: string) => void)|null = null): Promise<void> {
+        return new Promise((resolve, reject) => {
+            const id = generateUuid();
+            if (progress) {
+                this.uninstallProgresses[id] = (action, count, total) => {
+                    if (action === "ERR01" || action === "ERR02") {
+                        reject(new Error(action));
+                    } else {
+                        progress(action, count, total);
+                    }
+                };
+            }
+            this.uninstallFinishes[id] = () => {
+                resolve();
+            };
+            execute("Uninstall", id, dest);
+        });
+    }
+
+    public static async isPatchInstalled(gameFolder: string): Promise<boolean> {
+        return await executeWithReturn<boolean>("IsPatchInstalled", gameFolder);
     }
 }
