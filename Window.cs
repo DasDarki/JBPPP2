@@ -34,7 +34,7 @@ internal class Window
         Controller.Scan<T>();
     }
     
-    private void SendCommand(string command, params object[] args)
+    internal void SendCommand(string command, params object[] args)
     {
         _handle.SendMessage(JsonConvert.SerializeObject(new {command, args}));
     }

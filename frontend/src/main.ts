@@ -5,6 +5,9 @@ import App from './App.vue'
 import '@fortawesome/fontawesome-free/css/all.css';
 import '@/styles/main.scss';
 import i18n from "@/i18n";
+import {InstallController} from "@/controllers/install-controller";
+
+InstallController.initialize();
 
 const app = createApp(App)
 

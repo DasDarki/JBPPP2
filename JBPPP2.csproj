@@ -8,6 +8,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <PackageReference Include="DotNetZip" Version="1.16.0" />
       <PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
       <PackageReference Include="WebWindow" Version="0.1.0-20200807.1" />
     </ItemGroup>

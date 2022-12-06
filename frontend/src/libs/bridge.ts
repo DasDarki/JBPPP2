@@ -1,4 +1,5 @@
 const callbacks: { [key: string]: (data: any) => void } = {};
+const events: { [key: string]: (...args: any[]) => void } = {};
 const bridge: ExternalBridge = (window as any).external as ExternalBridge;
 
 interface Command {
@@ -12,7 +13,7 @@ interface ExternalBridge {
     receiveMessage: (cb: (json: string) => void) => void;
 }
 
-function generateUuid() {
+export function generateUuid() {
     let d = new Date().getTime();
     if (typeof performance !== 'undefined' && typeof performance.now === 'function') {
         d += performance.now(); //use high-precision timer if available
@@ -23,6 +24,22 @@ function generateUuid() {
         d = Math.floor(d / 16);
         return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16);
     });
+}
+
+export function onEvent(event: string, cb: (...args: any[]) => void) {
+    events[event] = cb;
+}
+
+export function offEvent(event: string) {
+    delete events[event];
+}
+
+export function onceEvent(event: string, cb: (...args: any[]) => void) {
+    const wrapped = (...args: any[]) => {
+        cb(...args);
+        offEvent(event);
+    };
+    onEvent(event, wrapped);
 }
 
 export function execute(name: string, ...args: any[]) {
@@ -58,11 +75,13 @@ export function executeWithReturn<T>(name: string, ...args: any[]): Promise<T> {
 if (bridge) {
     bridge.receiveMessage((json: string) => {
         const command: Command = JSON.parse(json);
-        if (command && command.args[0] && command.args[1]) {
-            const callback = callbacks[command.args[0]];
-            if (callback) {
-                callback(command.args[1]);
-                delete callbacks[command.args[0]];
+        if (command) {
+            if (command.command === 'SendResult' && command.args[0] && command.args[1]) {
+                const callback = callbacks[command.args[0]];
+                if (callback) {
+                    callback(command.args[1]);
+                    delete callbacks[command.args[0]];
+                }
             }
         }
     });

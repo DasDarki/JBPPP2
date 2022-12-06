@@ -1,10 +1,10 @@
-import VueI18n from 'vue-i18n'
+import { createI18n } from 'vue-i18n'
 import {SettingsManager} from "@/libs/SettingsManager";
 import en from "@/assets/locales/en.json";
 
 export const AvailableLocales = [{name: "English", code: "en"}];
 
-const i18n = VueI18n.createI18n({
+const i18n = createI18n({
   locale: SettingsManager.getLocale(),
   fallbackLocale: 'en',
   messages: {

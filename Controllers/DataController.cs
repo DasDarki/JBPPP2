@@ -16,6 +16,14 @@ internal class DataController
         window.SendResult(rid, games);
     }
 
+    internal static string GetDataPath()
+    {
+        var path = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+        path = Path.Combine(path, "JBPPP2");
+        Directory.CreateDirectory(path);
+        return path;
+    }
+
     private static T? GetData<T>(string url)
     {
         using var client = new HttpClient();

@@ -5,13 +5,17 @@ import Settings from "@/components/Settings/Settings.vue";
 import {LoadingState} from "@/@types/enums";
 import {useStore} from "@/stores/main";
 import {onMounted, ref} from "vue";
+import {LauncherController} from "@/controllers/launcher-controller";
 
 const {games, loadGames} = useStore();
 
 const dataLoading = ref(LoadingState.Initializing);
+const settings = ref<InstanceType<typeof Settings>>(null!);
 
 onMounted(async () => {
   try {
+    await LauncherController.getLaunchers();
+
     dataLoading.value = LoadingState.LoadGames;
     await loadGames();
   } finally {
