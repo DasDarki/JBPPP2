@@ -10,6 +10,9 @@ internal class Config
     [JsonProperty("launchers")] 
     internal List<Launcher> Launchers { get; set; } = new();
 
+    [JsonProperty("skipVersionCheck")]
+    internal bool SkipVersionCheck { get; set; } = false;
+
     internal void Save()
     {
         var path = Path.Combine(DataController.GetDataPath(), "config.json");

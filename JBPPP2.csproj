@@ -1,16 +1,74 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <OutputType>Exe</OutputType>
+        <OutputType>WinExe</OutputType>
         <TargetFramework>net7.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
+        <ApplicationIcon>icon.ico</ApplicationIcon>
+        <GenerateEmbeddedFilesManifest>true</GenerateEmbeddedFilesManifest>
+        <EmbedWwwRoot>false</EmbedWwwRoot>
     </PropertyGroup>
 
     <ItemGroup>
       <PackageReference Include="DotNetZip" Version="1.16.0" />
+      <PackageReference Include="Gameloop.Vdf" Version="0.6.2" />
+      <PackageReference Include="Gameloop.Vdf.JsonConverter" Version="0.2.1" />
+      <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="7.0.0" />
       <PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
-      <PackageReference Include="WebWindow" Version="0.1.0-20200807.1" />
+      <PackageReference Include="Photino.NET" Version="2.3.0" />
+      <PackageReference Include="Photino.NET.Server" Version="1.0.0" />
     </ItemGroup>
 
+    <PropertyGroup>
+        <UiRoot>UserInterface\</UiRoot>
+        <UiBuildOutput>dist\</UiBuildOutput>
+        <WwwRoot Condition=" '$(EmbedWwwRoot)' != 'true' ">wwwroot\</WwwRoot>
+        <WwwRoot Condition=" '$(EmbedWwwRoot)' == 'true' ">Resources\wwwroot\</WwwRoot>
+    </PropertyGroup>
+    
+    <ItemGroup>
+        <!-- Don't publish the UI source files, but do show them in the project files list -->
+        <Content Remove="$(UiRoot)**" />
+        <None Remove="$(UiRoot)**" />
+        <None Include="$(UiRoot)**" Exclude="$(UiRoot)node_modules\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <EmbeddedResource Include="Resources\**" Condition=" '$(GenerateEmbeddedFilesManifest)' == 'true' " />
+    </ItemGroup>
+
+    <Target Name="EnsureNodeEnv" BeforeTargets="BuildUserInterface" Condition=" !Exists('$(UiRoot)node_modules') ">
+        <!-- Ensure Node.js is installed -->
+        <Exec Command="node --version" ContinueOnError="true">
+            <Output TaskParameter="ExitCode" PropertyName="ErrorCode" />
+        </Exec>
+        <Error Condition="'$(ErrorCode)' != '0'" Text="Node.js is required to build and run this project. To continue, please install Node.js from https://nodejs.org/, and then restart your command prompt or IDE." />
+    </Target>
+
+    <Target Name="BuildUserInterface" BeforeTargets="BeforeBuild">
+        <!-- As part of publishing, ensure the JS resources are freshly built in production mode -->
+        <Message Importance="high" Text="Restoring dependencies using 'npm'. This may take several minutes..." />
+        <Exec WorkingDirectory="$(UiRoot)" Command="npm install" />
+        <Exec WorkingDirectory="$(UiRoot)" Command="npm run build" />
+
+        <ItemGroup>
+            <UiBuildOutputFiles Include="$(UiRoot)$(UiBuildOutput)**\*.*" />
+        </ItemGroup>
+
+        <Copy
+                SourceFiles="@(UiBuildOutputFiles)"
+                DestinationFiles="@(UiBuildOutputFiles->'$(WwwRoot)%(RecursiveDir)%(Filename)%(Extension)')" />
+
+        <MakeDir
+                Directories="$(TargetDir)\$(WwwRoot)"
+                Condition=" '$(EmbedWwwRoot)' != 'true' And !Exists('$(TargetDir\$(WwwRoot)') " />
+
+        <Copy
+                SourceFiles="@(UiBuildOutputFiles)"
+                DestinationFiles="@(UiBuildOutputFiles->'$(TargetDir)\$(WwwRoot)%(RecursiveDir)%(Filename)%(Extension)')"
+                Condition=" '$(EmbedWwwRoot)' != 'true' " />
+
+        <RemoveDir Directories="$(UiRoot)$(UiBuildOutput)" />
+    </Target>
 </Project>

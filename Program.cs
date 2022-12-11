@@ -1,10 +1,20 @@
-﻿using JBPPP2;
-using JBPPP2.Controllers;
+﻿using JBPPP2.Controllers;
 using JBPPP2.Model;
 
-Config.Load();
+namespace JBPPP2;
 
-var window = new Window();
+internal static class Program
+{
+    [STAThread]
+    internal static void Main(string[] args)
+    {
+        Config.Load();
 
-window.RegisterController<DataController>();
-window.WaitForExit();
+        var window = new Window(args);
+
+        window.RegisterController<DataController>();
+        window.RegisterController<InstallController>();
+        window.RegisterController<LauncherController>();
+        window.WaitForExit();
+    }
+}

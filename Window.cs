@@ -1,32 +1,41 @@
 using JBPPP2.Controllers;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using WebWindows;
+using PhotinoNET;
+using PhotinoNET.Server;
 
 namespace JBPPP2;
 
 internal class Window
 {
-    private readonly WebWindow _handle;
+    private readonly PhotinoWindow _handle;
 
-    internal Window()
+    internal Window(string[] args)
     {
-        _handle = new WebWindow("JBPPP v2 (c) DasDarki");
-        _handle.OnWebMessageReceived += OnMessageReceived;
+        PhotinoServer.CreateStaticFileServer(args, out var baseUrl).RunAsync();
+        
+        _handle = new PhotinoWindow()
+            .SetTitle("JBPPP2 (c) DasDarki")
+            .Center()
+            .SetResizable(true)
+            .SetIconFile(Path.Combine(Environment.CurrentDirectory, "icon.ico"))
+            .RegisterWebMessageReceivedHandler(OnMessageReceived);
 
 #if DEBUG
-        _handle.NavigateToUrl("http://localhost:5173");
+        _handle.Load(new Uri("http://localhost:5173"));
+#else
+        _handle.Load($"{baseUrl}/index.html");
 #endif
     }
 
-    internal void SendResult(string rid, object result)
+    internal void SendResult(string rid, object? result)
     {
         SendCommand("SendResult", rid, result);
     }
 
     internal void WaitForExit()
     {
-        _handle.WaitForExit();
+        _handle.WaitForClose();
     }
 
     internal void RegisterController<T>()
@@ -34,9 +43,9 @@ internal class Window
         Controller.Scan<T>();
     }
     
-    internal void SendCommand(string command, params object[] args)
+    internal void SendCommand(string command, params object?[] args)
     {
-        _handle.SendMessage(JsonConvert.SerializeObject(new {command, args}));
+        _handle.SendWebMessage(JsonConvert.SerializeObject(new {command, args}));
     }
 
     private void OnMessageReceived(object? sender, string e)

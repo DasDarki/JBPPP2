@@ -1,0 +1,18 @@
+{
+  "main.loading.init": "Initialisiere...",
+  "main.loading.resolve-launchers": "Löse Launcher auf...",
+  "main.loading.latest-playlist": "Lade die aktuellste Spieleliste...",
+  "main.loading.load-status": "Lade Status...",
+  "main.loading.load-locations": "Lade Speicherorte...",
+  "main.loading.failed": "Das Laden der Spiele ist fehlgeschlagen! Bitte versuche es später erneut.",
+  "settings.title": "Optionen",
+  "settings.language": "Sprache ändern",
+  "settings.prio-launcher": "Bevorzugter Launcher",
+  "settings.location": "Installiere diese Sprache",
+  "settings.invalidate-cache": "Invalidiere Cache",
+  "settings.invalidate-cache.hint": "Wenn du den Cache invalidierst, werden die im Cache befindlichen Spiele automatisch neu geladen.",
+  "progress.install.preparing": "Bereite vor...",
+  "progress.install.downloading": "Lade herunter...",
+  "progress.install.extracting": "Installiere...",
+  "progress.uninstalling": "Deinstalliere..."
+}

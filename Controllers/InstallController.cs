@@ -1,10 +1,42 @@
+using System.ComponentModel;
+using System.Net;
 using Ionic.Zip;
 using JBPPP2.Extensions;
+using JBPPP2.Model;
+using Newtonsoft.Json.Linq;
 
 namespace JBPPP2.Controllers;
 
 internal class InstallController
 {
+    [Controller("CheckVersion")]
+    internal static void CheckVersion(Window window, string rid, string gamePath, string configFileName, string newVersion)
+    {
+        if (Config.Instance is {SkipVersionCheck: true})
+        {
+            window.SendResult(rid, true);
+            return;
+        }
+
+        var configFile = Path.Combine(gamePath, configFileName);
+        if (!File.Exists(configFile))
+        {
+            window.SendResult(rid, false);
+            return;
+        }
+        
+        JObject configObj = JObject.Parse(File.ReadAllText(configFile));
+        var version = configObj["buildVersion"]?.ToString();
+
+        if (string.IsNullOrEmpty(version))
+        {
+            window.SendResult(rid, false);
+            return;
+        }
+        
+        window.SendResult(rid, newVersion.StartsWith(version));
+    }
+    
     [Controller("Download")]
     internal static void Download(Window window, string progressId, string url)
     {
@@ -12,16 +44,21 @@ internal class InstallController
         Directory.CreateDirectory(tmpFile);
         tmpFile = Path.Combine(tmpFile, Guid.NewGuid() + ".zip");
 
-        Task.Run(async () =>
-        {
-            using var client = new HttpClient();
-            using var file = new FileStream(tmpFile, FileMode.Create, FileAccess.Write, FileShare.None);
-            var progress = new Progress<float>(x => window.SendCommand("DownloadProgress", progressId, x));
-            
-            await client.DownloadAsync(url, file, progress);
-            
-            window.SendCommand("DownloadFinish", progressId, tmpFile);
-        });
+        Thread thread = new Thread(() => {
+            WebClient client = new WebClient();
+            client.DownloadProgressChanged += (_, args) => {
+                double bytesIn = args.BytesReceived;
+                double totalBytes = args.TotalBytesToReceive;
+                double percentage = bytesIn / totalBytes;
+
+                window.SendCommand("DownloadProgress", progressId, percentage);
+            };
+            client.DownloadFileCompleted += (_, _) => {
+                window.SendCommand("DownloadFinish", progressId, tmpFile);
+            };
+            client.DownloadFileAsync(new Uri(url), tmpFile);
+        }){IsBackground = true};
+        thread.Start();
     }
     
     [Controller("Install")]
@@ -64,8 +101,9 @@ internal class InstallController
                 var destFile = Path.Combine(destRoot, fileName);
                 
                 ReplaceFileAndBackup(file, destFile);
+                files++;
                 
-                window.SendCommand("InstallProgress", id, "MOVE", ++files, total);
+                window.SendCommand("InstallProgress", id, "MOVE", files, total);
             }
         }
         
@@ -97,22 +135,21 @@ internal class InstallController
             return;
         }
         
-        var total = files;
-        window.SendCommand("UninstallProgress", id, "MOVE", 0, total);
+        var count = 0;
+        window.SendCommand("UninstallProgress", id, "MOVE", 0, files);
 
         void RestoreBackup(string dir)
         {
             foreach (var file in Directory.GetFiles(dir))
             {
                 var fileName = Path.GetFileName(file);
-                var backupFile = Path.Combine(dir, fileName + ".bak");
+                var backupFile = Path.Combine(dir, fileName + ".jbppp2_bak");
                 if (File.Exists(backupFile))
                 {
                     File.Move(backupFile, file, true);
                     File.Delete(backupFile);
+                    window.SendCommand("UninstallProgress", id!, "MOVE", ++count, files);
                 }
-                
-                window.SendCommand("UninstallProgress", id!, "MOVE", ++files, total);
             }
             
             foreach (var innerDir in Directory.GetDirectories(dir))
@@ -139,7 +176,7 @@ internal class InstallController
     {
         if (File.Exists(destination))
         {
-            File.Copy(destination, destination + ".bak", true);
+            File.Copy(destination, destination + ".jbppp2_bak", true);
         }
         
         File.Move(source, destination, true);

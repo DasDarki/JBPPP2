@@ -16,6 +16,9 @@ internal class Game
     [JsonProperty("appid")]
     internal int AppId { get; set; }
     
+    [JsonProperty("appname")]
+    internal string AppName { get; set; }
+    
     [JsonProperty("exe")]
     internal string Exe { get; set; }
     

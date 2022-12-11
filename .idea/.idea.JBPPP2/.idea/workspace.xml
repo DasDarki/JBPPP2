@@ -4,24 +4,91 @@
     <projectFile>JBPPP2.csproj</projectFile>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e42e6209-8765-4759-9101-3a5f83b08148" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Controllers/InstallController.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Controllers/LauncherController.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Extensions/DownloadExtensions.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Model/Config.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Model/Enums/LauncherType.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Model/Launcher.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/controllers/install-controller.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/controllers/launcher-controller.ts" afterDir="false" />
+    <list default="true" id="dbf364cd-042b-4ef8-b496-1776db597984" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/Extensions/SerializerExtensions.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/UserInterface/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/UserInterface/.vscode/extensions.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/UserInterface/README.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/UserInterface/env.d.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/UserInterface/index.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/UserInterface/package-lock.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/UserInterface/package.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/UserInterface/src/@types/enums.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/UserInterface/src/@types/models.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/UserInterface/src/App.vue" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/UserInterface/src/assets/fonts/Poppins-Regular.ttf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/UserInterface/src/assets/locales/de.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/UserInterface/src/assets/locales/en.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/UserInterface/src/components/Blur.vue" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/UserInterface/src/components/GameCard.vue" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/UserInterface/src/components/Loader/Loader.vue" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/UserInterface/src/components/Loader/Spinner.vue" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/UserInterface/src/components/Settings/Settings.vue" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/UserInterface/src/controllers/data-controller.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/UserInterface/src/controllers/install-controller.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/UserInterface/src/controllers/launcher-controller.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/UserInterface/src/i18n.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/UserInterface/src/libs/bridge.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/UserInterface/src/libs/settings-manager.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/UserInterface/src/main.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/UserInterface/src/stores/main.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/UserInterface/src/styles/_base.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/UserInterface/src/styles/_components.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/UserInterface/src/styles/_fonts.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/UserInterface/src/styles/_layout.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/UserInterface/src/styles/_reset.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/UserInterface/src/styles/_variables.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/UserInterface/src/styles/main.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/UserInterface/tsconfig.config.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/UserInterface/tsconfig.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/UserInterface/vite.config.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/icon.ico" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.JBPPP2/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.JBPPP2/.idea/encodings.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.JBPPP2/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.JBPPP2/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.JBPPP2/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.JBPPP2/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Controllers/DataController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Controllers/DataController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Controllers/InstallController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Controllers/InstallController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Controllers/LauncherController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Controllers/LauncherController.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/JBPPP2.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/JBPPP2.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Model/Config.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Model/Config.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Model/Game.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Model/Game.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Program.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Window.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Window.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/App.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/App.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/i18n.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/i18n.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/libs/bridge.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/libs/bridge.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/main.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/main.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/.vscode/extensions.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/README.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/env.d.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/index.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/package-lock.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/package.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/public/favicon.ico" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/@types/enums.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/@types/models.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/App.vue" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/assets/fonts/Poppins-Regular.ttf" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/assets/locales/en.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/components/Blur.vue" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/components/GameCard.vue" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/components/Loader/Loader.vue" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/components/Loader/Spinner.vue" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/components/Settings/Settings.vue" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/controllers/data-controller.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/controllers/install-controller.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/controllers/launcher-controller.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/i18n.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/libs/SettingsManager.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/libs/bridge.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/main.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/stores/main.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/styles/_base.scss" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/styles/_components.scss" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/styles/_fonts.scss" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/styles/_layout.scss" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/styles/_reset.scss" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/styles/_variables.scss" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/styles/main.scss" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/tsconfig.config.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/tsconfig.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/vite.config.ts" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -29,16 +96,21 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="HighlightingSettingsPerFile">
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/5724c098a4bd4e749ed8290f0015863e3a00/9d/a0c48a66/WebWindow.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/b3430f75cbe448939fd28b2113b99db7ae0000/89/e6fe2e91/Dictionary`2.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/4517ed5aa9407d332ca560fff94cc14b1558eb27bc0119ecba967a065152378/RegistryKey.FileSystem.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/93e82d5717c981ad1cf5d359e8aa9276ad2a822837b42a0ac7b17efde327c/RegistryKey.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/e3c91fe319324f04a0ded940987c37091e00/fc/6c1f8248/PhotinoServer.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/25cb82be999237d199926bd836256e48a692ea1507c48e3ecd0a3971155/Progress.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Controllers/Controller.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Controllers/InstallController.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Controllers/LauncherController.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Extensions/SerializerExtensions.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Model/Config.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Program.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Window.cs" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
-  <component name="ProjectId" id="2IDf1G87MCAV8drGo6dr7nqZMbE" />
-  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+  <component name="ProjectId" id="2Iln0ORwlhdpiFuzpsvZIwZ3Sqy" />
+  <component name="ProjectLevelVcsManager">
     <ConfirmationsSetting value="2" id="Add" />
   </component>
   <component name="ProjectViewState">
@@ -47,15 +119,18 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
-    "ASKED_ADD_EXTERNAL_FILES": "true",
-    "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "WebServerToolWindowFactoryState": "false",
-    "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "preferences.pluginManager",
+    "settings.editor.selected.configurable": "preferences.updates",
     "vue.rearranger.settings.migration": "true"
+  },
+  "keyToStringList": {
+    "rider.external.source.directories": [
+      "C:\\Users\\lukas\\AppData\\Roaming\\JetBrains\\Rider2022.3\\resharper-host\\DecompilerCache",
+      "C:\\Users\\lukas\\AppData\\Roaming\\JetBrains\\Rider2022.3\\resharper-host\\SourcesCache",
+      "C:\\Users\\lukas\\AppData\\Local\\Symbols\\src"
+    ]
   }
 }]]></component>
   <component name="RunManager">
@@ -81,15 +156,12 @@
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="e42e6209-8765-4759-9101-3a5f83b08148" name="Changes" comment="" />
-      <created>1669720858476</created>
+      <changelist id="dbf364cd-042b-4ef8-b496-1776db597984" name="Changes" comment="" />
+      <created>1670764817837</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1669720858476</updated>
-      <workItem from="1669720860857" duration="9494000" />
-      <workItem from="1669822085359" duration="33000" />
-      <workItem from="1669822132659" duration="2421000" />
-      <workItem from="1670313718390" duration="4712000" />
+      <updated>1670764817837</updated>
+      <workItem from="1670764818256" duration="14724000" />
     </task>
     <servers />
   </component>
@@ -98,7 +170,6 @@
   </component>
   <component name="UnityUnitTestConfiguration" currentTestLauncher="NUnit" />
   <component name="VcsManagerConfiguration">
-    <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
   </component>
 </project>
