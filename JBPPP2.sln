@@ -2,6 +2,8 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JBPPP2", "JBPPP2\JBPPP2.csproj", "{37D68376-9449-4853-B9D0-352895A67B28}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JBPPP2.Updater", "JBPPP2.Updater\JBPPP2.Updater.csproj", "{CCAA0D84-BA11-4911-B83D-AD20BCBAE190}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -12,5 +14,9 @@ Global
 		{37D68376-9449-4853-B9D0-352895A67B28}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{37D68376-9449-4853-B9D0-352895A67B28}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{37D68376-9449-4853-B9D0-352895A67B28}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CCAA0D84-BA11-4911-B83D-AD20BCBAE190}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CCAA0D84-BA11-4911-B83D-AD20BCBAE190}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CCAA0D84-BA11-4911-B83D-AD20BCBAE190}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CCAA0D84-BA11-4911-B83D-AD20BCBAE190}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
