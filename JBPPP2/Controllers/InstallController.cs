@@ -64,59 +64,62 @@ internal class InstallController
     [Controller("Install")]
     internal static void Install(Window window, string id, string zip, string destination)
     {
-        using var zipFile = new ZipFile(zip);
-        var files = 0;
-        var total = zipFile.Count;
-        window.SendCommand("InstallProgress", id, "EXTRACT", 0, total);
-        
-        zipFile.ExtractProgress += (_, args) =>
+        Thread thread = new Thread(() =>
         {
-            if (args.EventType == ZipProgressEventType.Extracting_BeforeExtractEntry)
-            {
-                window.SendCommand("InstallProgress", id, "EXTRACT", ++files, total);
-            }
-        };
+            using var zipFile = new ZipFile(zip);
+            var files = 0;
+            var total = zipFile.Count;
+            window.SendCommand("InstallProgress", id, "EXTRACT", 0, total);
 
-        var extractTo = GetTempFolder(id);
-        
-        zipFile.ExtractAll(extractTo, ExtractExistingFileAction.OverwriteSilently);
-        
-        files = 0;
-        window.SendCommand("InstallProgress", id, "MOVE", 0, total);
-
-        void MoveFiles(string sourceRoot, string destRoot)
-        {
-            foreach (var innerDir in Directory.GetDirectories(sourceRoot))
+            zipFile.ExtractProgress += (_, args) =>
             {
-                var dirName = Path.GetFileName(innerDir);
-                var destDir = Path.Combine(destRoot, dirName);
-                Directory.CreateDirectory(destDir);
-                
-                MoveFiles(innerDir, destDir);
-            }
-            
-            foreach (var file in Directory.GetFiles(sourceRoot))
-            {
-                var fileName = Path.GetFileName(file);
-                var destFile = Path.Combine(destRoot, fileName);
-                
-                ReplaceFileAndBackup(file, destFile);
-                files++;
-                
-                window.SendCommand("InstallProgress", id, "MOVE", files, total);
-            }
-        }
-        
-        MoveFiles(extractTo, destination);
-        
-        window.SendCommand("InstallProgress", id, "CLEAN", total, total);
-        
-        var path = Path.Combine(destination, "patched");
-        File.WriteAllText(path, files.ToString());
+                if (args.EventType == ZipProgressEventType.Extracting_BeforeExtractEntry)
+                {
+                    window.SendCommand("InstallProgress", id, "EXTRACT", ++files, total);
+                }
+            };
 
-        Directory.Delete(extractTo, true);
-        
-        window.SendCommand("InstallFinish", id);
+            var extractTo = GetTempFolder(id);
+
+            zipFile.ExtractAll(extractTo, ExtractExistingFileAction.OverwriteSilently);
+
+            files = 0;
+            window.SendCommand("InstallProgress", id, "MOVE", 0, total);
+
+            void MoveFiles(string sourceRoot, string destRoot)
+            {
+                foreach (var innerDir in Directory.GetDirectories(sourceRoot))
+                {
+                    var dirName = Path.GetFileName(innerDir);
+                    var destDir = Path.Combine(destRoot, dirName);
+                    Directory.CreateDirectory(destDir);
+
+                    MoveFiles(innerDir, destDir);
+                }
+
+                foreach (var file in Directory.GetFiles(sourceRoot))
+                {
+                    var fileName = Path.GetFileName(file);
+                    var destFile = Path.Combine(destRoot, fileName);
+
+                    ReplaceFileAndBackup(file, destFile);
+                    files++;
+
+                    window.SendCommand("InstallProgress", id, "MOVE", files, total);
+                }
+            }
+
+            MoveFiles(extractTo, destination);
+
+            window.SendCommand("InstallProgress", id, "CLEAN", total, total);
+
+            var path = Path.Combine(destination, "patched");
+            File.WriteAllText(path, files.ToString());
+
+            Directory.Delete(extractTo, true);
+
+            window.SendCommand("InstallFinish", id);
+        });
     }
 
     [Controller("Uninstall")]
