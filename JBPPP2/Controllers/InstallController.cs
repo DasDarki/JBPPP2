@@ -7,6 +7,38 @@ namespace JBPPP2.Controllers;
 
 internal class InstallController
 {
+    [Controller("ExistsNewPatch")]
+    internal static void ExistsNewPatch(Window window, string rid, string gamePath, string configFileName, string newVersion)
+    {
+        var configFile = Path.Combine(gamePath, configFileName);
+        if (!File.Exists(configFile))
+        {
+            window.SendResult(rid, false);
+            return;
+        }
+        
+        JObject configObj = JObject.Parse(File.ReadAllText(configFile));
+        var version = configObj["buildVersion"]?.ToString();
+        
+        if (version == null)
+        {
+            window.SendResult(rid, false);
+            return;
+        }
+
+        try
+        {
+            var change = version.Split('.').Last().Split('-').First();
+            var newChange = newVersion.Split('.').Last().Split('-').First();
+
+            window.SendResult(rid, int.Parse(newChange) > int.Parse(change));
+        }
+        catch
+        {
+            window.SendResult(rid, false);
+        }
+    }
+    
     [Controller("CheckVersion")]
     internal static void CheckVersion(Window window, string rid, string gamePath, string configFileName, string newVersion)
     {
@@ -60,7 +92,7 @@ internal class InstallController
     }
     
     [Controller("Install")]
-    internal static void Install(Window window, string id, string zip, string destination)
+    internal static void Install(Window window, string id, string zip, string destination, bool skipBackup)
     {
         Thread thread = new Thread(() =>
         {
@@ -100,7 +132,7 @@ internal class InstallController
                     var fileName = Path.GetFileName(file);
                     var destFile = Path.Combine(destRoot, fileName);
 
-                    ReplaceFileAndBackup(file, destFile);
+                    ReplaceFileAndBackup(file, destFile, skipBackup);
                     files++;
 
                     window.SendCommand("InstallProgress", id, "MOVE", files, total);
@@ -173,9 +205,9 @@ internal class InstallController
         window.SendResult(rid, File.Exists(patchedFile));
     }
 
-    private static void ReplaceFileAndBackup(string source, string destination)
+    private static void ReplaceFileAndBackup(string source, string destination, bool skipBackup)
     {
-        if (File.Exists(destination))
+        if (!skipBackup && File.Exists(destination))
         {
             File.Copy(destination, destination + ".jbppp2_bak", true);
         }

@@ -62,6 +62,27 @@ export class InstallController {
         return location.patch[game.shortname];
     }
 
+    public static existsNewPatch(gamePath: string, game: Game): Promise<boolean> {
+        const {getCurrentLocation} = useStore();
+
+        return new Promise((resolve) => {
+            (async () => {
+                const location = getCurrentLocation();
+                if (!location || location.version[game.shortname] === undefined) {
+                    resolve(false);
+                    return;
+                }
+
+                const newConfig = await fetch(location.version[game.shortname]).then((res) => res.json());
+                const newVersion = newConfig.buildVersion;
+
+                const success = await executeWithReturn<boolean>("ExistsNewPatch", gamePath, game.config, newVersion);
+
+                resolve(success);
+            })();
+        });
+    }
+
     public static checkVersion(gamePath: string, game: Game): Promise<boolean> {
         const {getCurrentLocation} = useStore();
 
@@ -97,7 +118,7 @@ export class InstallController {
         });
     }
 
-    public static install(file: string, dest: string, progress: ((action: "EXTRACT"|"MOVE"|"CLEAN", count: number, total: number) => void)|null = null): Promise<void> {
+    public static install(file: string, dest: string, progress: ((action: "EXTRACT"|"MOVE"|"CLEAN", count: number, total: number) => void)|null = null, skipBackup: boolean = false): Promise<void> {
         return new Promise((resolve) => {
             const id = generateUuid();
             if (progress) {
@@ -107,7 +128,7 @@ export class InstallController {
                 delete this.installProgresses[id];
                 resolve();
             };
-            execute("Install", id, file, dest);
+            execute("Install", id, file, dest, skipBackup);
         });
     }
 

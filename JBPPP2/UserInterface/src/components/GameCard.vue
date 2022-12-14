@@ -16,6 +16,7 @@ const opened = ref(false);
 
 const installed = ref(false);
 const loading = ref(true);
+const updateAvailable = ref(false);
 
 const progress = ref(0);
 const progressText = ref("");
@@ -73,6 +74,63 @@ async function install() {
       progress.value = 70 + (29 * count / total);
     }
   });
+  progress.value = 99;
+
+  installed.value = true;
+  progressText.value = "";
+  progress.value = 0;
+  loading.value = false;
+}
+
+async function update() {
+  if (loading.value || !updateAvailable.value) return;
+
+  loading.value = true;
+  progressText.value = "install.preparing";
+
+  const gamePath = await LauncherController.findGamePath(props.game);
+  if (!gamePath) {
+    progressText.value = "";
+    progress.value = 0;
+    loading.value = false;
+
+    alert("Game path not found!");
+    return;
+  }
+
+  if (!await InstallController.checkVersion(gamePath, props.game)) {
+    progressText.value = "";
+    progress.value = 0;
+    loading.value = false;
+
+    alert("Version check failed!");
+    return;
+  }
+
+  const downloadLink = InstallController.findDownloadLink(props.game);
+  if (!downloadLink) {
+    progressText.value = "";
+    progress.value = 0;
+    loading.value = false;
+
+    alert("Download link not found!");
+    return;
+  }
+
+  progressText.value = "install.downloading";
+  const tempPath = await InstallController.download(downloadLink, percent => {
+    progress.value = 49 * percent;
+  });
+  progress.value = 49;
+
+  progressText.value = "install.extracting";
+  await InstallController.install(tempPath, gamePath, (action, count, total) => {
+    if (action === "EXTRACT") {
+      progress.value = 49 + (21 * count / total);
+    } else if (action === "MOVE") {
+      progress.value = 70 + (29 * count / total);
+    }
+  }, true);
   progress.value = 99;
 
   installed.value = true;
@@ -154,6 +212,10 @@ onMounted(async () => {
   const dir = await LauncherController.findGamePath(props.game);
   if (dir) {
     installed.value = await InstallController.isPatchInstalled(dir);
+
+    if (installed.value) {
+      updateAvailable.value = await InstallController.existsNewPatch(dir, props.game);
+    }
   } else {
     installed.value = false;
   }
@@ -175,6 +237,9 @@ onMounted(async () => {
         </div>
         <small v-if="loading && progressText" style="font-style: italic; opacity: 0.5; font-size: 0.9rem">{{$t('progress.' + progressText)}} ({{normalizedProgress}}%)</small>
         <div class="actions" :class="{open: opened}" v-if="opened || (!closing && !opening)">
+          <div v-if="installed && updateAvailable" class="btn success bordered rounded" :class="{'custom-loading': loading}" @click.stop="update">
+            <i class="fas" :class="loading ? 'fa-spinner' : 'fa-download'"></i>
+          </div>
           <div v-if="!installed" class="btn bordered rounded" :class="{'custom-loading': loading}" @click.stop="install">
             <i class="fas" :class="loading ? 'fa-spinner' : 'fa-download'"></i>
           </div>

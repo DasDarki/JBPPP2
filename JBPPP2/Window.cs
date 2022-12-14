@@ -12,13 +12,17 @@ internal class Window
 
     internal Window(string[] args)
     {
+#if !DEBUG
         PhotinoServer.CreateStaticFileServer(args, out var baseUrl).RunAsync();
+#endif
         
         _handle = new PhotinoWindow()
             .SetTitle("JBPPP2 (c) DasDarki")
             .Center()
             .SetResizable(true)
+#if !DEBUG
             .SetIconFile(Path.Combine(Environment.CurrentDirectory, "icon.ico"))
+#endif
             .RegisterWebMessageReceivedHandler(OnMessageReceived);
 
 #if DEBUG
