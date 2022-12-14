@@ -3,6 +3,7 @@ using System.Net;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
+using JBPPP2.Model;
 using Newtonsoft.Json;
 
 namespace JBPPP2;
@@ -14,6 +15,11 @@ internal class AutoUpdater
 
     internal static bool CheckForUpdates()
     {
+        if (Config.Instance?.SkipUpdateCheck == true)
+        {
+            return false;
+        }
+        
         var data = GetUpdateData();
 
         if (data == null)
@@ -46,9 +52,15 @@ internal class AutoUpdater
             client.DownloadFile(_cachedDownloadUrl, tmp);
             
             var tmpBase64 = Convert.ToBase64String(Encoding.UTF8.GetBytes(tmp));
-            var updater = Path.Combine(Environment.CurrentDirectory, "JBPPP2.Updater" + (RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? ".exe" : ""));
+            var updater = Path.Combine(Environment.CurrentDirectory, "updater", "JBPPP2.Updater" + (RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? ".exe" : ""));
             
-            Process.Start(updater, tmpBase64 + " " + Convert.ToBase64String(Encoding.UTF8.GetBytes(Assembly.GetExecutingAssembly().Location)));
+            var pi = new ProcessStartInfo(updater, tmpBase64 + " " + Convert.ToBase64String(Encoding.UTF8.GetBytes(Assembly.GetExecutingAssembly().Location)))
+            {
+                UseShellExecute = true,
+                Verb = "runas"
+            };
+            
+            Process.Start(pi);
             
             Environment.Exit(0);
             return true;
@@ -64,9 +76,8 @@ internal class AutoUpdater
     {
         try
         {
-            using var client = new WebClient();
-
-            var json = client.DownloadString(UpdateDataUrl);
+            using var client = new HttpClient();
+            var json = client.GetStringAsync(UpdateDataUrl).GetAwaiter().GetResult();
         
             return JsonConvert.DeserializeObject<UpdateData>(json);
         }

@@ -8,6 +8,8 @@ internal static class Program
     [STAThread]
     internal static void Main(string[] args)
     {
+        Config.Load();
+        
 #if !DEBUG
         if (AutoUpdater.CheckForUpdates())
         {
@@ -18,8 +20,6 @@ internal static class Program
         }
 #endif
         
-        Config.Load();
-
         var window = new Window(args);
 
         window.RegisterController<DataController>();

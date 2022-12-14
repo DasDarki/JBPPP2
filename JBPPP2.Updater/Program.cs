@@ -1,6 +1,8 @@
 ﻿using System.Diagnostics;
 using System.Text;
 using Ionic.Zip;
+using System;
+using System.Runtime.InteropServices;
 
 if (args.Length != 2)
 {
@@ -22,12 +24,22 @@ if (!File.Exists(exe))
     return;
 }
 
+if (exe.EndsWith(".dll"))
+{
+    exe = string.Concat(exe.AsSpan(0, exe.Length - 4), RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? ".exe" : "");
+}
+
 Console.Title = "JBPPP2 Updater (c) DasDarki";
 
 Console.WriteLine("Installing Update! Please wait...");
 
 var outputDir = Environment.CurrentDirectory;
 
+var outputDirName = new DirectoryInfo(outputDir).Name;
+if (outputDirName == "updater")
+{
+    outputDir = Path.Combine(outputDir, "..");
+}
 
 try
 {

@@ -12,6 +12,9 @@ internal class Config
 
     [JsonProperty("skipVersionCheck")]
     internal bool SkipVersionCheck { get; set; } = false;
+    
+    [JsonProperty("skipUpdateCheck")]
+    internal bool SkipUpdateCheck { get; set; } = false;
 
     internal void Save()
     {
