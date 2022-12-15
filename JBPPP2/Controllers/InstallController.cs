@@ -149,7 +149,8 @@ internal class InstallController
             Directory.Delete(extractTo, true);
 
             window.SendCommand("InstallFinish", id);
-        });
+        }) {IsBackground = true};
+        thread.Start();
     }
 
     [Controller("Uninstall")]
