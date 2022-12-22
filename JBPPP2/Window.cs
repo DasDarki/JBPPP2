@@ -9,6 +9,7 @@ namespace JBPPP2;
 internal class Window
 {
     private readonly PhotinoWindow _handle;
+    
 
     internal Window(string[] args)
     {
@@ -26,7 +27,7 @@ internal class Window
             .RegisterWebMessageReceivedHandler(OnMessageReceived);
 
 #if DEBUG
-        _handle.Load(new Uri("http://localhost:5173"));
+        _handle.Load(new Uri("http://localhost:5174"));
 #else
         _handle.Load($"{baseUrl}/index.html");
 #endif

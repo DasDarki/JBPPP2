@@ -17,6 +17,7 @@ const opened = ref(false);
 const installed = ref(false);
 const loading = ref(true);
 const updateAvailable = ref(false);
+const currentVersion = ref("");
 
 const progress = ref(0);
 const progressText = ref("");
@@ -41,14 +42,14 @@ async function install() {
     return;
   }
 
-  if (!await InstallController.checkVersion(gamePath, props.game)) {
+  /*if (!await InstallController.checkVersion(gamePath, props.game)) {
     progressText.value = "";
     progress.value = 0;
     loading.value = false;
 
     alert("Version check failed!");
     return;
-  }
+  }*/
 
   const downloadLink = InstallController.findDownloadLink(props.game);
   if (!downloadLink) {
@@ -98,15 +99,6 @@ async function update() {
     return;
   }
 
-  if (!await InstallController.checkVersion(gamePath, props.game)) {
-    progressText.value = "";
-    progress.value = 0;
-    loading.value = false;
-
-    alert("Version check failed!");
-    return;
-  }
-
   const downloadLink = InstallController.findDownloadLink(props.game);
   if (!downloadLink) {
     progressText.value = "";
@@ -134,6 +126,7 @@ async function update() {
   progress.value = 99;
 
   installed.value = true;
+  updateAvailable.value = false;
   progressText.value = "";
   progress.value = 0;
   loading.value = false;
@@ -172,8 +165,9 @@ async function uninstall() {
   });
 
   installed.value = false;
-
+  updateAvailable.value = false;
   progressText.value = "";
+  currentVersion.value = "";
   progress.value = 0;
   loading.value = false;
 }
@@ -214,6 +208,7 @@ onMounted(async () => {
     installed.value = await InstallController.isPatchInstalled(dir);
 
     if (installed.value) {
+      currentVersion.value = await InstallController.getCurrentVersion(dir, props.game);
       updateAvailable.value = await InstallController.existsNewPatch(dir, props.game);
     }
   } else {
@@ -236,6 +231,7 @@ onMounted(async () => {
           <span>{{game.title}}</span>
         </div>
         <small v-if="loading && progressText" style="font-style: italic; opacity: 0.5; font-size: 0.9rem">{{$t('progress.' + progressText)}} ({{normalizedProgress}}%)</small>
+        <small v-else-if="installed && currentVersion" style="font-style: italic; opacity: 0.5; font-size: 0.9rem">{{currentVersion}}</small>
         <div class="actions" :class="{open: opened}" v-if="opened || (!closing && !opening)">
           <div v-if="installed && updateAvailable" class="btn success bordered rounded" :class="{'custom-loading': loading}" @click.stop="update">
             <i class="fas" :class="loading ? 'fa-spinner' : 'fa-download'"></i>

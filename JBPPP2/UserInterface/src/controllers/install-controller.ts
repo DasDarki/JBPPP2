@@ -61,6 +61,16 @@ export class InstallController {
 
         return location.patch[game.shortname];
     }
+    
+    public static getCurrentVersion(gamePath: string, game: Game): Promise<string> {
+        return new Promise((resolve) => {
+            (async () => {
+                const version = await executeWithReturn<string>("GetCurrentVersion", gamePath, game.config);
+
+                resolve(version);
+            })();
+        });
+    }
 
     public static existsNewPatch(gamePath: string, game: Game): Promise<boolean> {
         const {getCurrentLocation} = useStore();
@@ -90,14 +100,28 @@ export class InstallController {
             (async () => {
                 const location = getCurrentLocation();
                 if (!location || location.version[game.shortname] === undefined) {
-                    resolve(false);
+                    if (prompt("The version check for the game failed. If you want to continue, enter \"YES\"") === "YES") {
+                        resolve(true);
+                    } else {
+                        resolve(false);
+                    }
                     return;
                 }
 
                 const newConfig = await fetch(location.version[game.shortname]).then((res) => res.json());
                 const newVersion = newConfig.buildVersion;
 
-                const success = await executeWithReturn<boolean>("CheckVersion", gamePath, game.config, newVersion);
+                let success = await executeWithReturn<boolean>("CheckVersion", gamePath, game.config, newVersion);
+                
+                console.log("CheckVersion", success);
+                
+                if (!success) {
+                    if (prompt("The version check for the game failed. If you want to continue, enter \"YES\"") === "YES") {
+                        success = true;
+                    }
+                }
+
+                console.log("NewCheckVersion", success);
 
                 resolve(success);
             })();

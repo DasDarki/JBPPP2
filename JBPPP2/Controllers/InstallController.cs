@@ -7,6 +7,22 @@ namespace JBPPP2.Controllers;
 
 internal class InstallController
 {
+    [Controller("GetCurrentVersion")]
+    internal static void GetCurrentVersion(Window window, string rid, string gamePath, string configFileName)
+    {
+        var configFile = Path.Combine(gamePath, configFileName);
+        if (!File.Exists(configFile))
+        {
+            window.SendResult(rid, false);
+            return;
+        }
+        
+        JObject configObj = JObject.Parse(File.ReadAllText(configFile));
+        var version = configObj["buildVersion"]?.ToString();
+        
+        window.SendResult(rid, string.IsNullOrEmpty(version) ? "" : version);
+    }
+    
     [Controller("ExistsNewPatch")]
     internal static void ExistsNewPatch(Window window, string rid, string gamePath, string configFileName, string newVersion)
     {
@@ -28,10 +44,10 @@ internal class InstallController
 
         try
         {
-            var change = version.Split('.').Last().Split('-').First();
-            var newChange = newVersion.Split('.').Last().Split('-').First();
+            var change = new BuildVersion(version);
+            var newChange = new BuildVersion(newVersion);
 
-            window.SendResult(rid, int.Parse(newChange) > int.Parse(change));
+            window.SendResult(rid, newChange.IsNewerThan(change));
         }
         catch
         {
@@ -222,4 +238,5 @@ internal class InstallController
         Directory.CreateDirectory(path);
         return path;
     }
+    
 }
